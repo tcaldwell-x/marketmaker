@@ -5,8 +5,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AutoBot - Travel Recommendations',
-  description: 'AI-powered travel recommendations for hotels, activities, and more',
+  title: 'ReservationBot - AI Restaurant Reservations',
+  description: 'AI-powered restaurant reservations on X/Twitter',
   icons: {
     icon: '/favicon.ico',
   },

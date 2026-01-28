@@ -80,11 +80,12 @@ export class FilteredStream {
   private async connectToStream(): Promise<void> {
     this.abortController = new AbortController();
     
-    // Build URL with expansions for getting full tweet data
+    // Build URL with expansions for getting full tweet data including media
     const params = new URLSearchParams({
-      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets',
-      'expansions': 'author_id,referenced_tweets.id,in_reply_to_user_id',
+      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets,attachments',
+      'expansions': 'author_id,referenced_tweets.id,in_reply_to_user_id,attachments.media_keys',
       'user.fields': 'name,username',
+      'media.fields': 'type,url,preview_image_url,width,height,alt_text',
     });
     
     const url = `${config.endpoints.filteredStream}?${params}`;

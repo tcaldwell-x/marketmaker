@@ -7,6 +7,9 @@ export interface Tweet {
   in_reply_to_user_id?: string;
   created_at?: string;
   referenced_tweets?: ReferencedTweet[];
+  attachments?: {
+    media_keys?: string[];
+  };
 }
 
 export interface ReferencedTweet {
@@ -20,11 +23,23 @@ export interface User {
   username: string;
 }
 
+// Media types for image understanding
+export interface Media {
+  media_key: string;
+  type: 'photo' | 'video' | 'animated_gif';
+  url?: string;           // For photos
+  preview_image_url?: string;  // For videos/gifs
+  width?: number;
+  height?: number;
+  alt_text?: string;
+}
+
 export interface StreamData {
   data: Tweet;
   includes?: {
     users?: User[];
     tweets?: Tweet[];
+    media?: Media[];
   };
   matching_rules?: MatchingRule[];
 }
@@ -66,6 +81,7 @@ export interface ConversationThread {
   tweets: Tweet[];
   participants: User[];
   originalTweet?: Tweet;
+  media?: Media[];  // All media from the conversation
 }
 
 // Recommendation types

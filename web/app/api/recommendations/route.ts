@@ -14,16 +14,24 @@ export async function POST(request: NextRequest) {
     
     const data: RecommendationData = {
       destination: body.destination,
+      type: body.type || 'market',
+      // Prediction market data
+      market: body.market,
+      // Legacy travel data (for backward compatibility)
       hotel: body.hotel,
       activity: body.activity,
-      searchUrl: body.searchUrl || `https://www.expedia.com/Hotel-Search?destination=${encodeURIComponent(body.destination)}`,
+      reservation: body.reservation,
+      searchUrl: body.searchUrl || 'https://marketmaker-nine.vercel.app',
       createdAt: Date.now(),
     };
     
     // Store with 30-day TTL (2592000 seconds)
     await redis.set(`r:${id}`, JSON.stringify(data), { ex: 2592000 });
     
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://autobot-five.vercel.app';
+    console.log(`[API] Stored ${data.type || 'market'} data with id: ${id}`);
+    console.log(`[API] hasMarket: ${!!data.market}, marketId: ${data.market?.id}`);
+    
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://marketmaker-nine.vercel.app';
     
     return NextResponse.json({ id, url: `${baseUrl}/r/${id}` });
   } catch (error) {

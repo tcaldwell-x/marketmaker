@@ -308,25 +308,74 @@ export class AutoBot {
    */
   private async storeAndGetUrl(response: BotResponse): Promise<string> {
     const data = response.data!;
+    const metadata = data.metadata as Record<string, any> | undefined;
+    
+    // Determine the type of data
+    const isMarket = metadata?.type === 'market_created' || metadata?.type === 'market_existing';
+    const isReservation = metadata?.type === 'reservation';
     
     // Map StorableData to the API format
-    const apiData = {
+    const apiData: Record<string, any> = {
       destination: data.title,
-      hotel: data.primaryItem ? {
+      searchUrl: data.actionUrl,
+      type: isMarket ? 'market' : isReservation ? 'reservation' : 'travel',
+    };
+    
+    if (isMarket && metadata) {
+      // Prediction market data
+      apiData.market = {
+        id: metadata.market_id,
+        question: metadata.question,
+        description: metadata.description,
+        category: metadata.category,
+        category_display: metadata.category_display,
+        resolution_date: metadata.resolution_date,
+        resolution_date_formatted: metadata.resolution_date_formatted,
+        yes_probability: metadata.yes_probability,
+        yes_probability_formatted: metadata.yes_probability_formatted,
+        no_probability: metadata.no_probability,
+        volume: metadata.volume,
+        volume_formatted: metadata.volume_formatted,
+        traders: metadata.traders,
+        source_claim: metadata.source_claim,
+        status: metadata.status || 'open',
+        is_new: metadata.type === 'market_created',
+      };
+    } else if (isReservation && metadata) {
+      // Reservation data (legacy)
+      apiData.reservation = {
+        confirmation_number: metadata.confirmation_number,
+        restaurant_name: metadata.restaurant?.name,
+        cuisine: metadata.restaurant?.cuisine,
+        neighborhood: metadata.restaurant?.neighborhood,
+        address: metadata.restaurant?.address,
+        phone: metadata.restaurant?.phone,
+        rating: metadata.restaurant?.rating,
+        price_range: metadata.restaurant?.price_range,
+        date: metadata.date,
+        date_formatted: data.subtitle?.split(' at ')[0] || metadata.date,
+        time: metadata.time,
+        time_formatted: data.subtitle?.split(' at ')[1] || metadata.time,
+        party_size: metadata.party_size,
+        special_requests: metadata.special_requests,
+      };
+    } else {
+      // Travel/other data (legacy)
+      apiData.hotel = data.primaryItem ? {
         name: data.primaryItem.name,
         price: data.primaryItem.price,
         rating: data.primaryItem.rating,
-      } : undefined,
-      activity: data.secondaryItem ? {
+      } : undefined;
+      apiData.activity = data.secondaryItem ? {
         title: data.secondaryItem.name,
         price: data.secondaryItem.price,
-      } : undefined,
-      searchUrl: data.actionUrl,
-    };
+      } : undefined;
+    }
     
     try {
       const apiUrl = `${config.websiteUrl}/api/recommendations`;
-      console.log(`[Bot] Storing data: ${apiUrl}`);
+      console.log(`[Bot] Storing ${apiData.type}: ${apiUrl}`);
+      console.log(`[Bot] Data being sent:`, JSON.stringify(apiData, null, 2));
       
       const res = await fetch(apiUrl, {
         method: 'POST',

@@ -15,6 +15,8 @@ export interface BrandingConfig {
   primaryColor: string;
   secondaryColor: string;
   accentColor: string;
+  yesColor: string;   // For YES probability
+  noColor: string;    // For NO probability
   
   // Gradients
   backgroundGradient: string;
@@ -37,40 +39,43 @@ export interface BrandingConfig {
  * Default branding configuration
  * Override any value with environment variables prefixed with NEXT_PUBLIC_BRAND_
  * 
- * Default colors based on Expedia brand:
- * - Blue: #00355F (primary)
- * - Yellow: #ffc60b (accent/highlight)
- * - White: #ffffff (text)
+ * Color palette:
+ * - Electric Blue: #3b82f6 (primary accent)
+ * - Charcoal/Black: #0a0a0a (near black background)
+ * - Green: #22c55e (YES probability)
+ * - Red: #ef4444 (NO probability)
  */
 export const branding: BrandingConfig = {
   // Bot identity
-  name: process.env.NEXT_PUBLIC_BRAND_NAME || 'BookingBot',
-  tagline: process.env.NEXT_PUBLIC_BRAND_TAGLINE || 'AI-Powered Travel Recommendations',
-  logo: process.env.NEXT_PUBLIC_BRAND_LOGO || '🛫',
+  name: process.env.NEXT_PUBLIC_BRAND_NAME || 'PredictBot',
+  tagline: process.env.NEXT_PUBLIC_BRAND_TAGLINE || 'AI-Powered Prediction Markets',
+  logo: process.env.NEXT_PUBLIC_BRAND_LOGO || '📊',
   
-  // Colors (Expedia brand)
-  primaryColor: process.env.NEXT_PUBLIC_BRAND_PRIMARY_COLOR || '#00355F',     // Expedia blue
-  secondaryColor: process.env.NEXT_PUBLIC_BRAND_SECONDARY_COLOR || '#ffc60b', // Expedia yellow
+  // Colors (dark + blue accent)
+  primaryColor: process.env.NEXT_PUBLIC_BRAND_PRIMARY_COLOR || '#0a0a0a',     // Near black
+  secondaryColor: process.env.NEXT_PUBLIC_BRAND_SECONDARY_COLOR || '#3b82f6', // Electric blue
   accentColor: process.env.NEXT_PUBLIC_BRAND_ACCENT_COLOR || '#ffffff',       // White
+  yesColor: process.env.NEXT_PUBLIC_BRAND_YES_COLOR || '#22c55e',             // Green
+  noColor: process.env.NEXT_PUBLIC_BRAND_NO_COLOR || '#ef4444',               // Red
   
-  // Gradients
+  // Gradients (darker, tech-focused)
   backgroundGradient: process.env.NEXT_PUBLIC_BRAND_BG_GRADIENT || 
-    'linear-gradient(135deg, #00355F 0%, #001a2e 50%, #002244 100%)',
+    'linear-gradient(135deg, #0a0a0a 0%, #0f172a 50%, #0a0a0a 100%)',
   buttonGradient: process.env.NEXT_PUBLIC_BRAND_BUTTON_GRADIENT || 
-    'linear-gradient(90deg, #ffc60b, #ffdb4d)',
+    'linear-gradient(90deg, #3b82f6, #2563eb)',
   textGradient: process.env.NEXT_PUBLIC_BRAND_TEXT_GRADIENT || 
-    'linear-gradient(90deg, #ffc60b, #ffe066)',
+    'linear-gradient(90deg, #3b82f6, #60a5fa)',
   
-  // Card styling
-  cardBackground: process.env.NEXT_PUBLIC_BRAND_CARD_BG || 'rgba(0, 53, 95, 0.7)',
-  cardBorder: process.env.NEXT_PUBLIC_BRAND_CARD_BORDER || 'rgba(255, 198, 11, 0.3)',
+  // Card styling (darker with blue tint)
+  cardBackground: process.env.NEXT_PUBLIC_BRAND_CARD_BG || 'rgba(15, 23, 42, 0.95)',
+  cardBorder: process.env.NEXT_PUBLIC_BRAND_CARD_BORDER || 'rgba(59, 130, 246, 0.3)',
   
   // Attribution
-  poweredBy: process.env.NEXT_PUBLIC_BRAND_POWERED_BY || 'Powered by Expedia',
-  poweredByUrl: process.env.NEXT_PUBLIC_BRAND_POWERED_BY_URL || 'https://www.expedia.com',
+  poweredBy: process.env.NEXT_PUBLIC_BRAND_POWERED_BY || 'Prediction Markets',
+  poweredByUrl: process.env.NEXT_PUBLIC_BRAND_POWERED_BY_URL || 'https://marketmaker-nine.vercel.app',
   
   // CTA
-  ctaText: process.env.NEXT_PUBLIC_BRAND_CTA_TEXT || 'Book Now →',
+  ctaText: process.env.NEXT_PUBLIC_BRAND_CTA_TEXT || 'Trade This Market →',
 };
 
 /**

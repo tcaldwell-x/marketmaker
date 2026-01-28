@@ -4,21 +4,46 @@ import { branding } from '@/lib/config';
 export default function NotFound() {
   return (
     <main 
-      className="flex min-h-screen flex-col items-center justify-center p-8"
+      className="min-h-screen relative overflow-hidden flex items-center justify-center"
       style={{ background: branding.backgroundGradient }}
     >
-      <div className="text-center">
-        <div className="text-6xl mb-6">{branding.logo}</div>
-        <h1 className="text-3xl font-bold mb-4 text-white">Recommendation Not Found</h1>
-        <p className="text-gray-400 mb-8">
-          This recommendation link may have expired or is invalid.
+      {/* Ambient background glow */}
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-10 blur-3xl pointer-events-none"
+        style={{ background: `radial-gradient(ellipse, ${branding.secondaryColor} 0%, transparent 70%)` }}
+      />
+      
+      <div className="relative z-10 text-center px-6">
+        {/* Logo */}
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 mb-8 text-5xl">
+          {branding.logo}
+        </div>
+        
+        {/* Error message */}
+        <h1 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight">
+          Not Found
+        </h1>
+        <p className="text-gray-500 mb-10 max-w-xs mx-auto leading-relaxed">
+          This link may have expired or doesn't exist.
         </p>
+        
+        {/* CTA */}
         <Link
           href="/"
-          className="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full transition-opacity hover:opacity-90"
-          style={{ background: branding.buttonGradient, color: branding.primaryColor }}
+          className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full transition-transform hover:scale-105 active:scale-95"
         >
-          Go Home
+          <div 
+            className="absolute inset-0 transition-opacity group-hover:opacity-90"
+            style={{ background: branding.buttonGradient }}
+          />
+          <div className="relative flex items-center gap-2 px-6 py-3">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="font-semibold text-white text-sm tracking-wide">
+              Go Home
+            </span>
+          </div>
         </Link>
       </div>
     </main>

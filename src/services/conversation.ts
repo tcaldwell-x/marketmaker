@@ -1,5 +1,5 @@
 import { xClient } from './x-client';
-import { Tweet, User, ConversationThread } from '../types';
+import { Tweet, User, ConversationThread, Media } from '../types';
 
 /**
  * Conversation Service
@@ -27,6 +27,7 @@ export class ConversationService {
       const conversationId = mentionTweet.conversation_id;
       const allTweets: Tweet[] = [mentionTweet];
       const allUsers: User[] = includes?.users || [];
+      const allMedia: Media[] = includes?.media || [];
       
       // If this tweet is a reply, fetch the original/parent tweet directly
       // This is more reliable than search which may not index recent tweets
@@ -42,6 +43,13 @@ export class ConversationService {
             for (const user of origIncludes.users) {
               if (!allUsers.find(u => u.id === user.id)) {
                 allUsers.push(user);
+              }
+            }
+          }
+          if (origIncludes?.media) {
+            for (const media of origIncludes.media) {
+              if (!allMedia.find(m => m.media_key === media.media_key)) {
+                allMedia.push(media);
               }
             }
           }
@@ -65,6 +73,13 @@ export class ConversationService {
                 for (const user of parentIncludes.users) {
                   if (!allUsers.find(u => u.id === user.id)) {
                     allUsers.push(user);
+                  }
+                }
+              }
+              if (parentIncludes?.media) {
+                for (const media of parentIncludes.media) {
+                  if (!allMedia.find(m => m.media_key === media.media_key)) {
+                    allMedia.push(media);
                   }
                 }
               }
@@ -95,6 +110,13 @@ export class ConversationService {
             }
           }
         }
+        if (searchResult.includes?.media) {
+          for (const media of searchResult.includes.media) {
+            if (!allMedia.find(m => m.media_key === media.media_key)) {
+              allMedia.push(media);
+            }
+          }
+        }
       } catch (err) {
         console.log('[Conversation] Search failed, using direct fetches only');
       }
@@ -107,6 +129,9 @@ export class ConversationService {
       });
       
       console.log(`[Conversation] Found ${sortedTweets.length} tweets in thread`);
+      if (allMedia.length > 0) {
+        console.log(`[Conversation] Found ${allMedia.length} media attachments`);
+      }
       
       const originalTweet = sortedTweets.find(t => t.id === conversationId);
       
@@ -114,6 +139,7 @@ export class ConversationService {
         tweets: sortedTweets,
         participants: allUsers,
         originalTweet,
+        media: allMedia.length > 0 ? allMedia : undefined,
       };
     } catch (error) {
       console.error('[Conversation] Error fetching thread:', error);

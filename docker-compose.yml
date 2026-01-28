@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: predictbot
+    restart: unless-stopped
+    environment:
+      # X/Twitter API credentials
+      - X_API_KEY=${X_API_KEY}
+      - X_API_SECRET=${X_API_SECRET}
+      - X_ACCESS_TOKEN=${X_ACCESS_TOKEN}
+      - X_ACCESS_TOKEN_SECRET=${X_ACCESS_TOKEN_SECRET}
+      - X_BEARER_TOKEN=${X_BEARER_TOKEN}
+      
+      # Grok AI
+      - GROK_API_KEY=${GROK_API_KEY}
+      
+      # Bot configuration
+      - BOT_USERNAME=${BOT_USERNAME:-marketmake67808}
+      - BOT_PLUGIN=${BOT_PLUGIN:-prediction-market}
+      - WEBSITE_URL=${WEBSITE_URL:-https://marketmaker-nine.vercel.app}
+    
+    # Optional: Add logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

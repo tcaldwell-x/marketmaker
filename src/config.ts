@@ -13,18 +13,18 @@ export const config = {
   accessTokenSecret: process.env.X_ACCESS_TOKEN_SECRET || '',
   
   // Bot configuration
-  botUsername: process.env.BOT_USERNAME || 'autobot_demo',
+  botUsername: process.env.BOT_USERNAME || 'marketmake67808',
   
   // Website URL (for OG preview links)
-  websiteUrl: process.env.WEBSITE_URL || 'https://autobot.vercel.app',
+  websiteUrl: process.env.WEBSITE_URL || 'https://marketmaker-nine.vercel.app',
   
   // Grok API (xAI) for intelligent conversation understanding
   grokApiKey: process.env.GROK_API_KEY || '',
   
   // Plugin configuration
   plugin: {
-    // Which plugin to use (default: expedia)
-    id: process.env.BOT_PLUGIN || 'expedia',
+    // Which plugin to use (default: prediction-market)
+    id: process.env.BOT_PLUGIN || 'prediction-market',
     // Sandbox mode for testing
     sandboxMode: process.env.PLUGIN_SANDBOX_MODE === 'true' || process.env.NODE_ENV !== 'production',
   },

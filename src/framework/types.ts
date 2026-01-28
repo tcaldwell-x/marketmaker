@@ -185,9 +185,10 @@ export interface BotPlugin {
    * Override this to customize what data gets stored for website links.
    * 
    * @param toolResults - Results from tool calls
+   * @param grokMessage - The message Grok generated (to help identify which item was recommended)
    * @returns Data to store, or null if no link should be added
    */
-  extractStorableData?(toolResults: ToolResult[]): StorableData | null;
+  extractStorableData?(toolResults: ToolResult[], grokMessage?: string): StorableData | null;
   
   /**
    * Cleanup when bot stops (optional)

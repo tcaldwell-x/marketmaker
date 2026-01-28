@@ -5,16 +5,17 @@
  */
 
 import { BotPlugin } from '../framework/types';
-import { expediaPlugin } from './expedia';
+import { predictionMarketPlugin } from './prediction-market';
 
 /**
  * All available plugins
  * Add your custom plugins to this array
  */
 export const availablePlugins: BotPlugin[] = [
-  expediaPlugin,
-  // Add more plugins here:
-  // myCustomPlugin,
+  predictionMarketPlugin,
+  // Legacy plugins (uncomment to enable):
+  // expediaPlugin,
+  // opentablePlugin,
 ];
 
 /**
@@ -32,4 +33,4 @@ export function listAvailablePlugins(): string[] {
 }
 
 // Re-export plugins for direct imports
-export { expediaPlugin } from './expedia';
+export { predictionMarketPlugin } from './prediction-market';

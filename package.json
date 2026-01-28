@@ -1,25 +1,30 @@
 {
-  "name": "xbot-framework",
-  "version": "2.0.0",
-  "description": "A framework for building X/Twitter bots powered by Grok AI with function calling",
+  "name": "predictbot",
+  "version": "1.0.0",
+  "description": "AI-powered prediction market bot for X/Twitter",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
-    "setup-rules": "ts-node src/scripts/setup-rules.ts",
-    "clean": "rm -rf dist",
-    "rebuild": "npm run clean && npm run build"
+    "lint": "eslint src/**/*.ts"
   },
-  "keywords": ["x", "twitter", "bot", "grok", "ai", "framework", "function-calling", "xai"],
+  "keywords": [
+    "twitter",
+    "x",
+    "bot",
+    "prediction-market",
+    "grok",
+    "ai"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
     "ts-node": "^10.9.2"
   }
 }

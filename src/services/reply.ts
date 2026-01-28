@@ -1,80 +1,66 @@
-import { xClient } from './x-client';
-import { Tweet, User } from '../types';
-
 /**
  * Reply Service
  * Handles posting replies to tweets
  */
-export class ReplyService {
-  private processedTweets = new Set<string>();
+
+import { xClient } from './x-client';
+import { User } from '../types';
+
+class ReplyService {
+  // Track tweets we've already replied to (to prevent duplicates)
+  private repliedTweets: Set<string> = new Set();
   
+  // Maximum size of the set before we start clearing old entries
+  private maxTrackedReplies = 10000;
+
   /**
-   * Reply to a tweet
-   * @param text - The reply text
-   * @param replyToTweetId - The tweet ID to reply to
-   * @param mentionUser - Optional user to @mention at the start
-   */
-  async reply(
-    text: string,
-    replyToTweetId: string,
-    mentionUser?: User
-  ): Promise<Tweet | null> {
-    // Check if we've already processed this tweet
-    if (this.processedTweets.has(replyToTweetId)) {
-      console.log(`[Reply] Already replied to tweet ${replyToTweetId}, skipping`);
-      return null;
-    }
-    
-    try {
-      // Prepend @username if provided (X requires mentioning the user you're replying to)
-      let replyText = text;
-      if (mentionUser && !text.startsWith(`@${mentionUser.username}`)) {
-        replyText = `@${mentionUser.username} ${text}`;
-      }
-      
-      // Ensure we don't exceed character limit
-      if (replyText.length > 280) {
-        console.warn('[Reply] Text exceeds 280 chars, truncating');
-        replyText = replyText.slice(0, 277) + '...';
-      }
-      
-      console.log(`[Reply] Posting reply to tweet ${replyToTweetId}`);
-      console.log(`[Reply] Text: ${replyText}`);
-      
-      const response = await xClient.postTweet(replyText, replyToTweetId);
-      
-      // Mark as processed
-      this.processedTweets.add(replyToTweetId);
-      
-      console.log(`[Reply] Successfully posted reply: ${response.data.id}`);
-      
-      return response.data;
-    } catch (error) {
-      console.error(`[Reply] Failed to post reply:`, error);
-      throw error;
-    }
-  }
-  
-  /**
-   * Check if a tweet has already been replied to
+   * Check if we've already replied to a tweet
    */
   hasReplied(tweetId: string): boolean {
-    return this.processedTweets.has(tweetId);
+    return this.repliedTweets.has(tweetId);
   }
-  
+
   /**
-   * Clear the processed tweets cache
-   * (useful for testing or if the bot restarts)
+   * Mark a tweet as replied to
    */
-  clearCache(): void {
-    this.processedTweets.clear();
+  markReplied(tweetId: string): void {
+    // Clear old entries if we're getting too big
+    if (this.repliedTweets.size >= this.maxTrackedReplies) {
+      const entries = Array.from(this.repliedTweets);
+      // Remove the oldest half
+      entries.slice(0, this.maxTrackedReplies / 2).forEach(id => {
+        this.repliedTweets.delete(id);
+      });
+    }
+    
+    this.repliedTweets.add(tweetId);
   }
-  
+
   /**
-   * Get count of processed tweets
+   * Post a reply to a tweet
    */
-  getProcessedCount(): number {
-    return this.processedTweets.size;
+  async reply(text: string, replyToId: string, author?: User): Promise<void> {
+    try {
+      // Mark as replied before posting to prevent race conditions
+      this.markReplied(replyToId);
+      
+      console.log(`[Reply] Posting reply to ${replyToId}:`);
+      console.log(`[Reply] Text (${text.length} chars): ${text}`);
+      
+      if (author) {
+        console.log(`[Reply] Replying to @${author.username}`);
+      }
+      
+      const result = await xClient.postTweet(text, replyToId, true);
+      
+      console.log(`[Reply] ✅ Posted successfully! Tweet ID: ${result.data.id}`);
+    } catch (error) {
+      // Remove from replied set if posting failed
+      this.repliedTweets.delete(replyToId);
+      
+      console.error('[Reply] ❌ Failed to post reply:', error);
+      throw error;
+    }
   }
 }
 

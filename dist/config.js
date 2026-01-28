@@ -1,0 +1,59 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.config = void 0;
+exports.validateConfig = validateConfig;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+exports.config = {
+    // OAuth 2.0 Bearer Token (App-only auth for filtered stream)
+    bearerToken: process.env.X_BEARER_TOKEN || '',
+    // OAuth 1.0a credentials (User context auth for posting)
+    apiKey: process.env.X_API_KEY || '',
+    apiSecret: process.env.X_API_SECRET || '',
+    accessToken: process.env.X_ACCESS_TOKEN || '',
+    accessTokenSecret: process.env.X_ACCESS_TOKEN_SECRET || '',
+    // Bot configuration
+    botUsername: process.env.BOT_USERNAME || 'marketmake67808',
+    // Website URL (for OG preview links)
+    websiteUrl: process.env.WEBSITE_URL || 'https://marketmaker-nine.vercel.app',
+    // Grok API (xAI) for intelligent conversation understanding
+    grokApiKey: process.env.GROK_API_KEY || '',
+    // Plugin configuration
+    plugin: {
+        // Which plugin to use (default: prediction-market)
+        id: process.env.BOT_PLUGIN || 'prediction-market',
+        // Sandbox mode for testing
+        sandboxMode: process.env.PLUGIN_SANDBOX_MODE === 'true' || process.env.NODE_ENV !== 'production',
+    },
+    // X API endpoints
+    endpoints: {
+        filteredStream: 'https://api.x.com/2/tweets/search/stream',
+        filteredStreamRules: 'https://api.x.com/2/tweets/search/stream/rules',
+        tweets: 'https://api.x.com/2/tweets',
+        users: 'https://api.x.com/2/users',
+    },
+    // Reconnection settings
+    reconnect: {
+        maxRetries: 20, // Higher for provisioning delays
+        baseDelayMs: 1000,
+        maxDelayMs: 300000, // 5 minutes
+    },
+};
+function validateConfig() {
+    const required = [
+        'bearerToken',
+        'apiKey',
+        'apiSecret',
+        'accessToken',
+        'accessTokenSecret',
+    ];
+    const missing = required.filter(key => !exports.config[key]);
+    if (missing.length > 0) {
+        throw new Error(`Missing required environment variables: ${missing.join(', ')}\n` +
+            'Please copy .env.example to .env and fill in your X API credentials.');
+    }
+}
+//# sourceMappingURL=config.js.map

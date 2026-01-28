@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { config } from '../config';
-import { Tweet, User, RulesResponse, StreamRule } from '../types';
+import { Tweet, User, RulesResponse, StreamRule, Media } from '../types';
 
 /**
  * X API Client
@@ -160,13 +160,14 @@ export class XClient {
   }
   
   /**
-   * Get a tweet by ID
+   * Get a tweet by ID (with media attachments)
    */
-  async getTweet(tweetId: string): Promise<{ data: Tweet; includes?: { users?: User[] } }> {
+  async getTweet(tweetId: string): Promise<{ data: Tweet; includes?: { users?: User[]; media?: Media[] } }> {
     const params = new URLSearchParams({
-      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets',
-      'expansions': 'author_id,referenced_tweets.id',
+      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets,attachments',
+      'expansions': 'author_id,referenced_tweets.id,attachments.media_keys',
       'user.fields': 'name,username',
+      'media.fields': 'type,url,preview_image_url,width,height,alt_text',
     });
     
     const url = `${config.endpoints.tweets}/${tweetId}?${params}`;
@@ -174,15 +175,16 @@ export class XClient {
   }
   
   /**
-   * Search tweets (for getting conversation thread)
+   * Search tweets (for getting conversation thread with media)
    */
-  async searchTweets(query: string, maxResults = 100): Promise<{ data?: Tweet[]; includes?: { users?: User[] } }> {
+  async searchTweets(query: string, maxResults = 100): Promise<{ data?: Tweet[]; includes?: { users?: User[]; media?: Media[] } }> {
     const params = new URLSearchParams({
       query,
       max_results: maxResults.toString(),
-      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets',
-      'expansions': 'author_id,referenced_tweets.id',
+      'tweet.fields': 'author_id,conversation_id,created_at,in_reply_to_user_id,referenced_tweets,attachments',
+      'expansions': 'author_id,referenced_tweets.id,attachments.media_keys',
       'user.fields': 'name,username',
+      'media.fields': 'type,url,preview_image_url,width,height,alt_text',
     });
     
     const url = `https://api.x.com/2/tweets/search/recent?${params}`;
@@ -191,12 +193,21 @@ export class XClient {
   
   /**
    * Post a tweet (reply)
+   * @param text - Tweet text
+   * @param replyToId - Optional tweet ID to reply to
+   * @param nullcast - If true, tweet won't appear in timelines (default: false)
    */
-  async postTweet(text: string, replyToId?: string): Promise<{ data: Tweet }> {
-    const body: { text: string; reply?: { in_reply_to_tweet_id: string } } = { text };
+  async postTweet(text: string, replyToId?: string, nullcast: boolean = false): Promise<{ data: Tweet }> {
+    const body: { text: string; reply?: { in_reply_to_tweet_id: string }; nullcast?: boolean } = { 
+      text,
+    };
     
     if (replyToId) {
       body.reply = { in_reply_to_tweet_id: replyToId };
+    }
+    
+    if (nullcast) {
+      body.nullcast = true;
     }
     
     return this.oauth1Request(config.endpoints.tweets, 'POST', body);
