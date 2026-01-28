@@ -1,0 +1,141 @@
+// X API Tweet types
+export interface Tweet {
+  id: string;
+  text: string;
+  author_id?: string;
+  conversation_id?: string;
+  in_reply_to_user_id?: string;
+  created_at?: string;
+  referenced_tweets?: ReferencedTweet[];
+}
+
+export interface ReferencedTweet {
+  type: 'replied_to' | 'quoted' | 'retweeted';
+  id: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  username: string;
+}
+
+export interface StreamData {
+  data: Tweet;
+  includes?: {
+    users?: User[];
+    tweets?: Tweet[];
+  };
+  matching_rules?: MatchingRule[];
+}
+
+export interface MatchingRule {
+  id: string;
+  tag?: string;
+}
+
+// Rule types
+export interface StreamRule {
+  id?: string;
+  value: string;
+  tag?: string;
+}
+
+export interface RulesResponse {
+  data?: StreamRule[];
+  meta: {
+    sent: string;
+    summary?: {
+      created: number;
+      not_created: number;
+      valid: number;
+      invalid: number;
+    };
+  };
+  errors?: ApiError[];
+}
+
+export interface ApiError {
+  title: string;
+  detail: string;
+  type: string;
+}
+
+// Conversation types
+export interface ConversationThread {
+  tweets: Tweet[];
+  participants: User[];
+  originalTweet?: Tweet;
+}
+
+// Recommendation types
+export interface HotelRecommendation {
+  id: string;
+  name: string;
+  price: string;
+  pricePerNight: number;
+  totalPrice: number;
+  description: string;
+  rating?: number;
+  reviewCount?: number;
+  amenities: string[];
+  bookingUrl: string;
+  imageUrl?: string;
+}
+
+export interface VacationRentalRecommendation {
+  id: string;
+  name: string;
+  propertyType: string;  // "Entire home", "Condo", "Villa", etc.
+  price: string;
+  pricePerNight: number;
+  totalPrice: number;
+  bedrooms: number;
+  bathrooms: number;
+  sleeps: number;
+  description: string;
+  rating?: number;
+  reviewCount?: number;
+  amenities: string[];
+  bookingUrl: string;
+  imageUrl?: string;
+}
+
+export interface CarRentalRecommendation {
+  id: string;
+  company: string;       // "Hertz", "Enterprise", etc.
+  carType: string;       // "Economy", "SUV", "Luxury", etc.
+  carName: string;       // "Toyota Corolla or similar"
+  price: string;
+  pricePerDay: number;
+  totalPrice: number;
+  features: string[];    // "Unlimited mileage", "Free cancellation", etc.
+  pickupLocation: string;
+  bookingUrl: string;
+  imageUrl?: string;
+}
+
+export interface ActivityRecommendation {
+  id: string;
+  title: string;
+  price: string;
+  priceAmount: number;
+  description: string;
+  duration?: string;
+  rating?: number;
+  reviewCount?: number;
+  bookingUrl: string;
+  imageUrl?: string;
+}
+
+export interface RecommendationResponse {
+  destination: string;
+  checkin?: string;
+  checkout?: string;
+  hotels: HotelRecommendation[];
+  vacationRentals: VacationRentalRecommendation[];
+  carRentals: CarRentalRecommendation[];
+  activities: ActivityRecommendation[];
+  searchUrl: string;  // Link to full Expedia search results
+  summary: string;
+}

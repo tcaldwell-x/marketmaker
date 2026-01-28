@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build
+.next/
+out/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
+
+# Debug
+npm-debug.log*
+
+# Misc
+.DS_Store
+*.pem
