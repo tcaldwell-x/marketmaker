@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { branding } from '@/lib/config';
+import { Logo } from '@/components/Logo';
 
 export default function NotFound() {
   return (
@@ -15,8 +16,8 @@ export default function NotFound() {
       
       <div className="relative z-10 text-center px-6">
         {/* Logo */}
-        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 mb-8 text-5xl">
-          {branding.logo}
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+          <Logo size="lg" />
         </div>
         
         {/* Error message */}

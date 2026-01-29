@@ -9,7 +9,7 @@ export interface BrandingConfig {
   // Bot identity
   name: string;
   tagline: string;
-  logo: string;  // Emoji or URL to image
+  logo: string;  // Emoji, or URL to image (e.g., "/logo.png" or "https://example.com/logo.png")
   
   // Colors (CSS values)
   primaryColor: string;
@@ -47,9 +47,9 @@ export interface BrandingConfig {
  */
 export const branding: BrandingConfig = {
   // Bot identity
-  name: process.env.NEXT_PUBLIC_BRAND_NAME || 'PredictBot',
-  tagline: process.env.NEXT_PUBLIC_BRAND_TAGLINE || 'AI-Powered Prediction Markets',
-  logo: process.env.NEXT_PUBLIC_BRAND_LOGO || '📊',
+  name: process.env.NEXT_PUBLIC_BRAND_NAME || 'FanDuel Predicts',
+  tagline: process.env.NEXT_PUBLIC_BRAND_TAGLINE || 'Put Your Predictions to the Test',
+  logo: process.env.NEXT_PUBLIC_BRAND_LOGO || '🎯',
   
   // Colors (dark + blue accent)
   primaryColor: process.env.NEXT_PUBLIC_BRAND_PRIMARY_COLOR || '#0a0a0a',     // Near black
@@ -71,7 +71,7 @@ export const branding: BrandingConfig = {
   cardBorder: process.env.NEXT_PUBLIC_BRAND_CARD_BORDER || 'rgba(59, 130, 246, 0.3)',
   
   // Attribution
-  poweredBy: process.env.NEXT_PUBLIC_BRAND_POWERED_BY || 'Prediction Markets',
+  poweredBy: process.env.NEXT_PUBLIC_BRAND_POWERED_BY || 'FanDuel',
   poweredByUrl: process.env.NEXT_PUBLIC_BRAND_POWERED_BY_URL || 'https://marketmaker-nine.vercel.app',
   
   // CTA

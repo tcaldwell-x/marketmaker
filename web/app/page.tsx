@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { branding } from '@/lib/config';
+import { Logo } from '@/components/Logo';
 
 export default function Home() {
   const botUsername = process.env.NEXT_PUBLIC_BOT_USERNAME || 'marketmake67808';
@@ -30,19 +32,12 @@ export default function Home() {
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-16">
         <div className="text-center max-w-md">
           {/* Logo Badge */}
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 mb-8 text-5xl">
-            {branding.logo}
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 mb-8">
+            <Logo size="lg" />
           </div>
           
           {/* Title */}
-          <h1 
-            className="text-4xl md:text-5xl font-bold tracking-tight mb-4"
-            style={{ 
-              background: branding.textGradient, 
-              WebkitBackgroundClip: 'text', 
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">
             {branding.name}
           </h1>
           
@@ -123,9 +118,16 @@ export default function Home() {
           href={branding.poweredByUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-gray-600 hover:text-gray-400 transition-colors tracking-wide"
+          className="inline-flex items-center gap-2 text-xs text-gray-600 hover:text-gray-400 transition-colors tracking-wide"
         >
-          {branding.poweredBy}
+          <span>Powered by</span>
+          <Image 
+            src="/logo.png" 
+            alt="FanDuel" 
+            width={80} 
+            height={20} 
+            className="opacity-60 hover:opacity-100 transition-opacity"
+          />
         </a>
       </footer>
     </main>

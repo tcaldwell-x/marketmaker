@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PredictBot - AI Prediction Markets',
+  title: 'FanDuel Predicts - Put Your Predictions to the Test',
   description: 'Create prediction markets from tweets. Turn any claim into a tradeable YES/NO market.',
   icons: {
     icon: '/favicon.ico',

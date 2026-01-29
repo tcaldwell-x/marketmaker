@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { redis } from '@/lib/redis';
 import { RecommendationData } from '@/lib/types';
 import { branding } from '@/lib/config';
+import { Logo } from '@/components/Logo';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
@@ -83,15 +85,8 @@ export default async function RecommendationPage({ params }: PageProps) {
           {/* Header */}
           <header className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 mb-6">
-              <span className="text-2xl">{branding.logo}</span>
-              <span 
-                className="text-sm font-semibold tracking-wide"
-                style={{ 
-                  background: branding.textGradient, 
-                  WebkitBackgroundClip: 'text', 
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
+              <Logo size="sm" />
+              <span className="text-sm font-semibold tracking-wide text-white">
                 {branding.name}
               </span>
             </div>
@@ -325,9 +320,16 @@ export default async function RecommendationPage({ params }: PageProps) {
               href={branding.poweredByUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-gray-600 hover:text-gray-400 transition-colors tracking-wide"
+              className="inline-flex items-center gap-2 text-xs text-gray-600 hover:text-gray-400 transition-colors tracking-wide"
             >
-              {branding.poweredBy}
+              <span>Powered by</span>
+              <Image 
+                src="/logo.png" 
+                alt="FanDuel" 
+                width={80} 
+                height={20} 
+                className="opacity-60 hover:opacity-100 transition-opacity"
+              />
             </a>
           </footer>
         </div>
