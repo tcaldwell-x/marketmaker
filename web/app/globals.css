@@ -29,13 +29,13 @@ a, button {
 
 /* Better focus states */
 :focus-visible {
-  outline: 2px solid rgba(185, 28, 28, 0.5);
+  outline: 2px solid rgba(59, 130, 246, 0.5);
   outline-offset: 2px;
 }
 
 /* Selection styling */
 ::selection {
-  background: rgba(185, 28, 28, 0.3);
+  background: rgba(59, 130, 246, 0.3);
   color: white;
 }
 
